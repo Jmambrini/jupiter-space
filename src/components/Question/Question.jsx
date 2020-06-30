@@ -3,7 +3,6 @@ import { Layout, Typography, Row, Col } from 'antd';
 import './Question.scss'
 import MobileHeader from '../MobileHeader';
 import BrowserHeader from '../BrowserHeader';
-import BottomButton from '../BottomButton';
 
 const { Text } = Typography;
 
