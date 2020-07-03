@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Input, Row, Col, Select } from 'antd';
 import 'antd/dist/antd.css';
 import './CreateSubjectsForm.scss'
@@ -9,28 +9,26 @@ import BottomButton from '../BottomButton';
 import MobileHeader from '../MobileHeader';
 import BrowserHeader from '../BrowserHeader';
 
+import { useLocation } from 'react-router-dom';
+import { ROUTES } from '../../constants';
+
 const { Option } = Select;
 const { TextArea } = Input;
-const gutterSize = [0, { xs: 0, sm: 0, md: 0 }];
 
 
-class CreateSubjectsForm extends Component {
-  formRef = React.createRef();
+const CreateSubjectsForm = () => {
+  // const [name, setName] = React.useState(null);
+  const [description, setDescription] = React.useState(null);
+  const [auxList, setAuxList] = React.useState([]);
+  const pageLocation = useLocation().pathname;
+  var page;
+  if(pageLocation === ROUTES.SUBJECTS_NEW){
+    page = 'Editar disciplina';
+  }
+
   
-  state = {
-    name: null,
-    code: null,
-    description: null,
-    auxList: [],
-  }
-
-  handleChange = (e) => {
-    this.setState({
-      [e.target.id]: e.target.value
-    });
-  }
-
-  handleSelect = (e) => {
+  
+  const handleSelect = (e) => {
     const aux = listaMaterias.filter((v) => v.name === e).map((v) => (v.alunos))[0]
     const auxDesc = listaMaterias.filter((v) => v.name === e).map((v) => (v.description))[0]
     const arrayAux = [];
@@ -38,32 +36,29 @@ class CreateSubjectsForm extends Component {
       arrayAux.push(listaAlunos.filter(v => v.USPN === aux[i].USPN)[0]);
     }
     
-    this.setState({ name: e, auxList: arrayAux, description: auxDesc })
+    // setName(e);
+    setAuxList(arrayAux);
+    setDescription(auxDesc);
   }
 
-  handleSubmit = (values) => {  
-
+  const handleSubmit = (values) => {  
+    // console.log(editPage);
      
   }
 
-  changeState = (v) => {
-    this.setState({ description: v })
-  }
 
-  render() {
-  const { auxList, description } = this.state;
   const list = listaMaterias.map((v) => (<Option value={v.name} key={v.cod}>{v.cod} - {v.name}</Option>))
     return (
       <div className="CreateSubjectsForm">
-        <MobileHeader title="Criar disciplina" color="white" />
-        <BrowserHeader title="Criar disciplina" />
-          <Row gutter={gutterSize}>
+        <MobileHeader title={page} color="white" />
+        <BrowserHeader title={page} />
+          <Row>
             <Col sm={{ span: 24 }} md={{ span: 18 }} lg={{ span: 12 }}>
               <Select 
                 placeholder="Nome da disciplina" 
                 type="text" 
                 id="name"       
-                onChange={this.handleSelect}          
+                onChange={handleSelect}          
               >
               {  
                 list
@@ -94,14 +89,14 @@ class CreateSubjectsForm extends Component {
             </Col>
           </Row>
 
-          <Row gutter={gutterSize}>
+          <Row>
             <Col xs={{ span: 22 }} lg={{ span: 16 }}>
-              <BottomButton title="Criar disciplina" onClick={this.handleSubmit}/>     
+              <BottomButton title={page} onClick={handleSubmit}/>     
             </Col>
           </Row>
       </div>
     );
-  }
+  
 }
 
 
